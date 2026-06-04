@@ -1,0 +1,44 @@
+@page
+@model ChatModel
+@{ ViewData["Title"] = "چت"; }
+<div class="flex h-[500px] border rounded">
+    <aside class="w-64 border-l p-4" id="conversationsList">
+        @foreach(var c in Model.Conversations) {
+            <div class="p-2 border-b cursor-pointer" onclick="loadChat(@c.SenderId, @c.AdvertisementId)">@c.SenderName</div>
+        }
+    </aside>
+    <section class="flex-1 flex flex-col p-4">
+        <div id="messages" class="flex-1 overflow-y-auto space-y-2"></div>
+        <div class="flex gap-2 mt-4">
+            <input id="msgInput" class="flex-1 border p-2 rounded" />
+            <button onclick="send()" class="bg-red-700 text-white px-4 py-2 rounded">ارسال</button>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src="~/js/signalr.min.js"></script>
+    <script>
+        const conn = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+        conn.on("ReceiveMessage", (senderId, adId, content) => { appendMsg(content, 'received'); });
+        conn.start();
+        let currReceiver = 0, currAd = 0;
+        function loadChat(rid, aid) {
+            currReceiver = rid; currAd = aid;
+            fetch(`/api/Chat/history?otherUserId=${rid}&adId=${aid}`, {headers:{'Authorization':'Bearer '+localStorage.getItem('token')}})
+                .then(r => r.json()).then(data => {
+                    const m = document.getElementById('messages'); m.innerHTML = '';
+                    data.forEach(msg => appendMsg(msg.content, msg.senderId == @Model.CurrentUserId ? 'sent' : 'received'));
+                });
+        }
+        function send() {
+            const i = document.getElementById('msgInput');
+            conn.invoke("SendMessage", currReceiver, currAd, i.value).then(() => { appendMsg(i.value, 'sent'); i.value = ''; });
+        }
+        function appendMsg(txt, type) {
+            const m = document.getElementById('messages');
+            const d = document.createElement('div'); d.innerText = txt;
+            d.className = type == 'sent' ? 'bg-red-100 self-end p-2 rounded' : 'bg-gray-100 self-start p-2 rounded';
+            m.appendChild(d);
+        }
+    </script>
+}

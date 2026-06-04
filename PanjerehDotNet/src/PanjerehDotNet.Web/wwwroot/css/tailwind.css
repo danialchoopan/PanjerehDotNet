@@ -1,0 +1,4 @@
+:root { --primary: #a62626; }
+body { font-family: sans-serif; transition: background 0.3s; }
+.dark { background: #121212; color: white; }
+.light { background: white; color: black; }

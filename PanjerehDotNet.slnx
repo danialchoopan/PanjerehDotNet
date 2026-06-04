@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/PanjerehDotNet/" />
+  <Folder Name="/PanjerehDotNet/src/">
+    <Project Path="PanjerehDotNet/src/PanjerehDotNet.Application/PanjerehDotNet.Application.csproj" />
+    <Project Path="PanjerehDotNet/src/PanjerehDotNet.Domain/PanjerehDotNet.Domain.csproj" />
+    <Project Path="PanjerehDotNet/src/PanjerehDotNet.Infrastructure/PanjerehDotNet.Infrastructure.csproj" />
+    <Project Path="PanjerehDotNet/src/PanjerehDotNet.Web/PanjerehDotNet.Web.csproj" />
+  </Folder>
+</Solution>
