@@ -1,7 +1,81 @@
 @page
 @model AdminModel
-@{ ViewData["Title"] = "پنل مدیریت"; }
-<h1 class="text-2xl font-bold">داشبورد مدیریت</h1>
-<div class="grid grid-cols-3 gap-4 mt-4">
-    <div class="border p-4">کل آگهی‌ها: @Model.Stats.TotalAds</div>
+@{ ViewData["Title"] = "پنل مدیریت پنجره"; }
+
+<div class="space-y-8">
+    <div class="flex items-center justify-between">
+        <h1 class="text-3xl font-black">داشبورد مدیریت</h1>
+        <div class="text-gray-400">تاریخ امروز: @DateTime.Now.ToString("yyyy/MM/dd")</div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-8 rounded-2xl border-b-4 border-blue-500 shadow-sm">
+            <div class="text-gray-400 text-sm font-bold mb-1">کل آگهی‌ها</div>
+            <div class="text-4xl font-black">@Model.Stats.TotalAds</div>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border-b-4 border-green-500 shadow-sm">
+            <div class="text-gray-400 text-sm font-bold mb-1">آگهی‌های تایید شده</div>
+            <div class="text-4xl font-black">@Model.Stats.ApprovedAds</div>
+        </div>
+        <div class="bg-white p-8 rounded-2xl border-b-4 border-red-500 shadow-sm">
+            <div class="text-gray-400 text-sm font-bold mb-1">در انتظار بررسی</div>
+            <div class="text-4xl font-black">@Model.Stats.PendingAds</div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+        <div class="p-6 border-b bg-gray-50 flex justify-between items-center">
+            <h2 class="font-black text-xl">آخرین آگهی‌ها</h2>
+            <button class="text-divar text-sm font-bold">مشاهده همه</button>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-right">
+                <thead>
+                    <tr class="text-gray-400 text-sm uppercase tracking-wider">
+                        <th class="p-6">شناسه</th>
+                        <th class="p-6">عنوان آگهی</th>
+                        <th class="p-6">وضعیت</th>
+                        <th class="p-6">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    @foreach(var ad in Model.RecentAds) {
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="p-6 font-mono text-xs">#@ad.Id</td>
+                            <td class="p-6 font-bold">@ad.Title</td>
+                            <td class="p-6">
+                                @if(ad.IsApproved) {
+                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">تایید شده</span>
+                                } else {
+                                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">در انتظار</span>
+                                }
+                            </td>
+                            <td class="p-6">
+                                @if(!ad.IsApproved) {
+                                    <button onclick="approve(@ad.Id)" class="text-divar font-bold text-sm">تایید فوری</button>
+                                }
+                                <button class="text-gray-400 font-bold text-sm mr-4">حذف</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        function approve(id) {
+            fetch(`/api/Admin/approve-ad/${id}`, {
+                method: 'POST',
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+            }).then(r => {
+                if(r.ok) {
+                    alert('آگهی تایید شد');
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

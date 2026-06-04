@@ -1,44 +1,95 @@
 @page
 @model ChatModel
-@{ ViewData["Title"] = "چت"; }
-<div class="flex h-[500px] border rounded">
-    <aside class="w-64 border-l p-4" id="conversationsList">
-        @foreach(var c in Model.Conversations) {
-            <div class="p-2 border-b cursor-pointer" onclick="loadChat(@c.SenderId, @c.AdvertisementId)">@c.SenderName</div>
-        }
+@{ ViewData["Title"] = "چت پنجره"; }
+
+<div class="max-w-6xl mx-auto flex h-[calc(100vh-160px)] bg-white border rounded-xl overflow-hidden shadow-sm">
+    <aside class="w-80 border-l flex flex-col bg-gray-50">
+        <div class="p-4 border-b bg-white">
+            <h2 class="font-black text-xl">گفتگوها</h2>
+        </div>
+        <div class="flex-1 overflow-y-auto">
+            @foreach(var c in Model.Conversations) {
+                <div class="p-4 border-b hover:bg-white cursor-pointer transition flex items-center gap-3" onclick="loadChat(@c.SenderId, @c.AdvertisementId)">
+                    <div class="w-12 h-12 bg-divar rounded-full flex items-center justify-center text-white font-bold">@c.SenderName[0]</div>
+                    <div class="flex-1 min-w-0">
+                        <div class="font-bold truncate text-sm">@c.SenderName</div>
+                        <div class="text-xs text-gray-500 truncate mt-1">@c.Content</div>
+                    </div>
+                </div>
+            }
+        </div>
     </aside>
-    <section class="flex-1 flex flex-col p-4">
-        <div id="messages" class="flex-1 overflow-y-auto space-y-2"></div>
-        <div class="flex gap-2 mt-4">
-            <input id="msgInput" class="flex-1 border p-2 rounded" />
-            <button onclick="send()" class="bg-red-700 text-white px-4 py-2 rounded">ارسال</button>
+
+    <section class="flex-1 flex flex-col bg-white">
+        <div id="chatHeader" class="p-4 border-b flex items-center justify-between">
+            <div class="font-bold" id="headerTitle">انتخاب گفتگو</div>
+        </div>
+
+        <div id="messages" class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col">
+            <div class="flex-1 flex flex-col items-center justify-center text-gray-400">
+                <svg class="w-16 h-16 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+                <p>برای شروع گفتگو، یکی از موارد سمت راست را انتخاب کنید</p>
+            </div>
+        </div>
+
+        <div class="p-4 bg-gray-50 border-t">
+            <div class="flex gap-2 max-w-4xl mx-auto">
+                <input id="msgInput" placeholder="پیام خود را بنویسید..." class="flex-1 border-none rounded-lg bg-white px-4 py-3 focus:ring-2 focus:ring-divar outline-none shadow-sm" />
+                <button onclick="send()" class="bg-red-700 text-white px-8 py-3 rounded-lg font-black hover:bg-red-800 transition shadow-sm">ارسال</button>
+            </div>
         </div>
     </section>
 </div>
+
 @section Scripts {
     <script src="~/js/signalr.min.js"></script>
     <script>
-        const conn = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
-        conn.on("ReceiveMessage", (senderId, adId, content) => { appendMsg(content, 'received'); });
-        conn.start();
         let currReceiver = 0, currAd = 0;
+        const conn = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        conn.on("ReceiveMessage", (senderId, adId, content) => {
+            if(senderId == currReceiver) appendMsg(content, 'received');
+        });
+
+        conn.start().catch(err => console.error(err));
+
         function loadChat(rid, aid) {
             currReceiver = rid; currAd = aid;
-            fetch(`/api/Chat/history?otherUserId=${rid}&adId=${aid}`, {headers:{'Authorization':'Bearer '+localStorage.getItem('token')}})
-                .then(r => r.json()).then(data => {
-                    const m = document.getElementById('messages'); m.innerHTML = '';
-                    data.forEach(msg => appendMsg(msg.content, msg.senderId == @Model.CurrentUserId ? 'sent' : 'received'));
-                });
+            document.getElementById('headerTitle').innerText = 'گفتگو با ' + rid;
+
+            fetch(`/api/Chat/history?otherUserId=${rid}&adId=${aid}`, {
+                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+            })
+            .then(res => res.json())
+            .then(data => {
+                const container = document.getElementById('messages');
+                container.innerHTML = '';
+                data.forEach(m => appendMsg(m.content, m.senderId == @Model.CurrentUserId ? 'sent' : 'received'));
+                container.scrollTop = container.scrollHeight;
+            });
         }
+
         function send() {
-            const i = document.getElementById('msgInput');
-            conn.invoke("SendMessage", currReceiver, currAd, i.value).then(() => { appendMsg(i.value, 'sent'); i.value = ''; });
+            const input = document.getElementById('msgInput');
+            const txt = input.value.trim();
+            if(!txt || !currReceiver) return;
+
+            conn.invoke("SendMessage", currReceiver, currAd, txt).then(() => {
+                appendMsg(txt, 'sent');
+                input.value = '';
+            });
         }
+
         function appendMsg(txt, type) {
             const m = document.getElementById('messages');
-            const d = document.createElement('div'); d.innerText = txt;
-            d.className = type == 'sent' ? 'bg-red-100 self-end p-2 rounded' : 'bg-gray-100 self-start p-2 rounded';
+            const d = document.createElement('div');
+            d.innerText = txt;
+            const style = type === 'sent'
+                ? 'self-end bg-red-700 text-white rounded-tr-none'
+                : 'self-start bg-gray-100 text-gray-800 rounded-tl-none';
+            d.className = `max-w-[70%] p-3 rounded-2xl shadow-sm text-sm ${style}`;
             m.appendChild(d);
+            m.scrollTop = m.scrollHeight;
         }
     </script>
 }

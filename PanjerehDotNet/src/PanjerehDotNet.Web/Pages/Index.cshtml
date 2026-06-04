@@ -1,27 +1,52 @@
 @page
 @model IndexModel
-@{ ViewData["Title"] = "صفحه اصلی"; }
-<div class="flex gap-6">
-    <aside class="w-64 hidden lg:block border-l pl-4">
-        <h3 class="font-bold mb-4">دسته‌بندی‌ها</h3>
-        <ul class="space-y-2">
-            <li><a href="?cat=1" class="hover:text-red-700">املاک</a></li>
-            <li><a href="?cat=2" class="hover:text-red-700">وسایل نقلیه</a></li>
-        </ul>
+@{ ViewData["Title"] = "دیوار پنجره دات‌نت"; }
+
+<div class="flex gap-12">
+    <aside class="w-64 flex-shrink-0 hidden lg:block sticky top-24 h-fit">
+        <h3 class="text-sm font-bold text-gray-500 mb-4 px-2">دسته‌بندی‌ها</h3>
+        <nav class="space-y-1">
+            <a href="/" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded text-gray-700">
+                <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span>همه آگهی‌ها</span>
+            </a>
+            <a href="?cat=1" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded text-gray-700">
+                <span>املاک</span>
+            </a>
+            <a href="?cat=2" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded text-gray-700">
+                <span>وسایل نقلیه</span>
+            </a>
+            <a href="?cat=3" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded text-gray-700">
+                <span>کالای دیجیتال</span>
+            </a>
+        </nav>
     </aside>
-    <section class="flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="adsContainer">
+
+    <div class="flex-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4" id="adsContainer">
             @foreach (var ad in Model.Ads) {
-                <a href="/AdDetails/@ad.Id" class="border rounded-lg p-3 flex gap-4 hover:shadow-lg transition">
-                    <div class="w-32 h-32 bg-gray-200 rounded flex-shrink-0">
-                        @if (ad.Images.Any()) { <img src="@ad.Images.First()" class="w-full h-full object-cover rounded" /> }
+                <a href="/AdDetails/@ad.Id" class="bg-white border rounded-lg overflow-hidden flex flex-col hover:shadow-md transition group">
+                    <div class="aspect-square bg-gray-100 relative">
+                        @if (ad.Images.Any()) {
+                            <img src="@ad.Images.First()" class="w-full h-full object-cover" />
+                        } else {
+                            <div class="w-full h-full flex items-center justify-center text-gray-300">
+                                <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/></svg>
+                            </div>
+                        }
                     </div>
-                    <div class="flex flex-col justify-between flex-1">
-                        <h2 class="font-bold text-lg">@ad.Title</h2>
-                        <p class="text-red-700 font-bold mt-2">@ad.Price.ToString("N0") تومان</p>
+                    <div class="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h2 class="font-bold text-gray-800 line-clamp-2 mb-1 group-hover:text-divar">@ad.Title</h2>
+                            <div class="text-xs text-gray-400 mb-2">@ad.District، @ad.City</div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="font-black text-divar">@ad.Price.ToString("N0") تومان</span>
+                            <span class="text-[10px] text-gray-300">@ad.CreatedAt.ToString("HH:mm")</span>
+                        </div>
                     </div>
                 </a>
             }
         </div>
-    </section>
+    </div>
 </div>
