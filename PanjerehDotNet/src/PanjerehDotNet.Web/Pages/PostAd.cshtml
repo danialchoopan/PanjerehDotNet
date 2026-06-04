@@ -1,0 +1,67 @@
+@page
+@model PanjerehDotNet.Web.Pages.PostAdModel
+@{
+    ViewData["Title"] = "ثبت آگهی جدید";
+}
+
+<div class="max-w-2xl mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-6 text-gray-800">ثبت آگهی</h1>
+
+    <form method="post" enctype="multipart/form-data" class="space-y-4">
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">عنوان آگهی</label>
+                <input asp-for="Input.Title" class="w-full p-2 border rounded-md" placeholder="مثلاً: آیفون ۱۳ پرو مکس در حد نو" required />
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">دسته‌بندی</label>
+                <select asp-for="Input.CategoryId" class="w-full p-2 border rounded-md" required>
+                    <option value="">انتخاب کنید...</option>
+                    @foreach(var cat in Model.Categories)
+                    {
+                        <option value="@cat.Id">@cat.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">توضیحات</label>
+                <textarea asp-for="Input.Description" rows="5" class="w-full p-2 border rounded-md" placeholder="جزئیات و ویژگی‌های کالای خود را بنویسید..." required></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">قیمت (تومان)</label>
+                    <input asp-for="Input.Price" type="number" class="w-full p-2 border rounded-md" required />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">شهر</label>
+                    <input asp-for="Input.City" class="w-full p-2 border rounded-md" required />
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">تصاویر آگهی</label>
+                <input type="file" name="Images" multiple class="w-full p-2 border border-dashed rounded-md bg-gray-50" accept="image/*" />
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+            <h2 class="text-lg font-semibold mb-3">موقعیت روی نقشه</h2>
+            <p class="text-xs text-gray-500 mb-4">لطفاً مختصات جغرافیایی را وارد کنید (در نسخه نهایی از نقشه تعاملی استفاده می‌شود)</p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">عرض جغرافیایی (Lat)</label>
+                    <input asp-for="Input.Latitude" type="text" class="w-full p-2 border rounded-md" value="35.6892" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">طول جغرافیایی (Lng)</label>
+                    <input asp-for="Input.Longitude" type="text" class="w-full p-2 border rounded-md" value="51.3890" />
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-md font-bold hover:bg-red-700 transition">ثبت و انتشار آگهی</button>
+    </form>
+</div>

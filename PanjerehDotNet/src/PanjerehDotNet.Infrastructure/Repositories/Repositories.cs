@@ -44,11 +44,13 @@ public class UnitOfWork : IUnitOfWork {
         Advertisements = new AdvertisementRepository(_context);
         Categories = new Repository<Category>(_context);
         Chats = new ChatRepository(_context);
+        Reports = new Repository<AdReport>(_context);
     }
     public IUserRepository Users { get; private set; }
     public IAdvertisementRepository Advertisements { get; private set; }
     public IRepository<Category> Categories { get; private set; }
     public IChatRepository Chats { get; private set; }
+    public IRepository<AdReport> Reports { get; private set; }
     public async Task<int> CompleteAsync() => await _context.SaveChangesAsync();
     public void Dispose() => _context.Dispose();
 }

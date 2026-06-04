@@ -1,27 +1,63 @@
 @page
 @model IndexModel
-@{ ViewData["Title"] = "صفحه اصلی"; }
-<div class="flex gap-6">
-    <aside class="w-64 hidden lg:block border-l pl-4">
-        <h3 class="font-bold mb-4">دسته‌بندی‌ها</h3>
-        <ul class="space-y-2">
-            <li><a href="?cat=1" class="hover:text-red-700">املاک</a></li>
-            <li><a href="?cat=2" class="hover:text-red-700">وسایل نقلیه</a></li>
-        </ul>
-    </aside>
-    <section class="flex-1">
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="adsContainer">
-            @foreach (var ad in Model.Ads) {
-                <a href="/AdDetails/@ad.Id" class="border rounded-lg p-3 flex gap-4 hover:shadow-lg transition">
-                    <div class="w-32 h-32 bg-gray-200 rounded flex-shrink-0">
-                        @if (ad.Images.Any()) { <img src="@ad.Images.First()" class="w-full h-full object-cover rounded" /> }
-                    </div>
-                    <div class="flex flex-col justify-between flex-1">
-                        <h2 class="font-bold text-lg">@ad.Title</h2>
-                        <p class="text-red-700 font-bold mt-2">@ad.Price.ToString("N0") تومان</p>
-                    </div>
-                </a>
-            }
-        </div>
-    </section>
+<div id="ad-container" style="padding: 20px; background: #fff; min-height: 100vh;">
+    <h1 style="color: #a62626; font-size: 28px; font-weight: bold; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px;">دیوار پنجره - نیازمندی‌های آنلاین</h1>
+    <div id="ad-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
+        @foreach (var ad in Model.Ads)
+        {
+            <div class="ad-card" style="border: 1px solid #ddd; border-radius: 12px; padding: 15px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer;" onclick="location.href='/AdDetails/@ad.Id'">
+                <div style="height: 160px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #999;">تصویر کالا</div>
+                <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #333;">@ad.Title</h3>
+                <div style="color: #a62626; font-weight: bold; font-size: 16px;">@ad.Price.ToString("N0") تومان</div>
+                <div style="margin-top: 15px; font-size: 12px; color: #777; display: flex; justify-content: space-between;">
+                    <span>@ad.District</span>
+                    <span>لحظاتی پیش</span>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="loading" style="text-align: center; padding: 20px; display: none;">در حال بارگذاری...</div>
 </div>
+
+<script>
+    let page = 1;
+    let loading = false;
+    window.onscroll = function() {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500 && !loading) {
+            loadMoreAds();
+        }
+    };
+
+    function loadMoreAds() {
+        loading = true;
+        document.getElementById('loading').style.display = 'block';
+        page++;
+        fetch(`/api/ads?page=${page}&pageSize=6`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const grid = document.getElementById('ad-grid');
+                    data.forEach(ad => {
+                        const card = document.createElement('div');
+                        card.className = 'ad-card';
+                        card.style = 'border: 1px solid #ddd; border-radius: 12px; padding: 15px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer;';
+                        card.onclick = () => location.href = `/AdDetails/${ad.id}`;
+                        card.innerHTML = `
+                            <div style="height: 160px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #999;">تصویر کالا</div>
+                            <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #333;">${ad.title}</h3>
+                            <div style="color: #a62626; font-weight: bold; font-size: 16px;">${ad.price.toLocaleString()} تومان</div>
+                            <div style="margin-top: 15px; font-size: 12px; color: #777; display: flex; justify-content: space-between;">
+                                <span>${ad.district}</span>
+                                <span>لحظاتی پیش</span>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+                    loading = false;
+                    document.getElementById('loading').style.display = 'none';
+                } else {
+                    document.getElementById('loading').innerHTML = 'آگهی دیگری وجود ندارد';
+                }
+            });
+    }
+</script>

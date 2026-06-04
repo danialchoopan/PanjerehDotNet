@@ -12,16 +12,18 @@ public class ChatService : IChatService {
         var messages = await _unitOfWork.Chats.GetChatHistoryAsync(user1Id, user2Id, adId);
         return messages.Select(m => new ChatMessageDto {
             Id = m.Id, Content = m.Content, SentAt = m.SentAt, IsRead = m.IsRead, SenderId = m.SenderId,
+            ReceiverId = m.ReceiverId,
             SenderName = m.Sender?.FullName ?? m.Sender?.PhoneNumber ?? "Unknown",
-            AdvertisementId = m.AdvertisementId, AdvertisementTitle = m.Advertisement?.Title ?? ""
+            AdId = m.AdvertisementId, AdTitle = m.Advertisement?.Title ?? ""
         });
     }
     public async Task<IEnumerable<ChatMessageDto>> GetUserConversationsAsync(int userId) {
         var messages = await _unitOfWork.Chats.GetUserConversationsAsync(userId);
         return messages.Select(m => new ChatMessageDto {
             Id = m.Id, Content = m.Content, SentAt = m.SentAt, IsRead = m.IsRead, SenderId = m.SenderId,
+            ReceiverId = m.ReceiverId,
             SenderName = m.Sender?.FullName ?? m.Sender?.PhoneNumber ?? "Unknown",
-            AdvertisementId = m.AdvertisementId, AdvertisementTitle = m.Advertisement?.Title ?? ""
+            AdId = m.AdvertisementId, AdTitle = m.Advertisement?.Title ?? ""
         });
     }
 }

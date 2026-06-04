@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -21,24 +22,33 @@ builder.Services.AddSignalR();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlite("Data Source=panjereh.db"));
 
-// Authentication
+// Authentication - Support both JWT (for API/Mobile) and Cookies (for Web UI)
 var keyString = builder.Configuration["Jwt:Key"] ?? "SecretKeyForPanjerehDotNetProject2024";
 var key = Encoding.ASCII.GetBytes(keyString);
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+builder.Services.AddAuthentication(options => {
+    options.DefaultScheme = "SmartAuth";
+    options.DefaultChallengeScheme = "SmartAuth";
 })
-.AddJwtBearer(x =>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
-    {
+.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options => {
+    options.LoginPath = "/Login";
+})
+.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options => {
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = false,
         ValidateAudience = false
+    };
+})
+.AddPolicyScheme("SmartAuth", "SmartAuth", options => {
+    options.ForwardDefaultSelector = context => {
+        string auth = context.Request.Headers["Authorization"];
+        if (!string.IsNullOrEmpty(auth) && auth.StartsWith("Bearer "))
+            return JwtBearerDefaults.AuthenticationScheme;
+        return CookieAuthenticationDefaults.AuthenticationScheme;
     };
 });
 
@@ -59,7 +69,6 @@ using (var scope = app.Services.CreateScope())
     await PanjerehDotNet.Infrastructure.Data.DataSeeder.SeedAsync(context);
 }
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");

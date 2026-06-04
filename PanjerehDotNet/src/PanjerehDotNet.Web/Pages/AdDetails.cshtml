@@ -1,9 +1,18 @@
 @page "{id:int}"
 @model AdDetailsModel
-@{ ViewData["Title"] = Model.Ad.Title; }
-<div class="max-w-4xl mx-auto">
-    <h1 class="text-2xl font-bold mb-2">@Model.Ad.Title</h1>
-    <p class="text-xl font-bold text-red-700">@Model.Ad.Price.ToString("N0") تومان</p>
-    <p class="mt-4">@Model.Ad.Description</p>
-    <button class="bg-red-700 text-white px-6 py-2 rounded mt-4">شروع چت</button>
+<div style="display: flex; gap: 30px;">
+    <div style="flex: 2;">
+        <div style="height:400px; background:#000; border-radius:8px; color:#fff; display:flex; align-items:center; justify-content:center;">تصویر آگهی</div>
+        <h3>توضیحات</h3>
+        <p style="line-height:1.8;">@Model.Ad.Description</p>
+    </div>
+    <div style="flex: 1;">
+        <div style="border:1px solid #eee; padding:20px; border-radius:8px;">
+            <h1>@Model.Ad.Title</h1>
+            <p style="color:#999;">@Model.Ad.District</p>
+            <div style="font-size:20px; font-weight:bold; color:#a62626; margin:20px 0;">@Model.Ad.Price.ToString("N0") تومان</div>
+            <button style="width:100%; background:#a62626; color:#fff; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">نمایش شماره تماس</button>
+            <a href="/Chat" style="display:block; margin-top:10px; text-align:center; border:1px solid #a62626; color:#a62626; padding:12px; border-radius:4px; text-decoration:none; font-weight:bold;">چت</a>
+        </div>
+    </div>
 </div>

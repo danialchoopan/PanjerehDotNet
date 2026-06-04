@@ -3,29 +3,39 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - PanjerehDotNet</title>
-    <link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - پنجره دات‌نت</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body class="light transition-colors duration-300">
-    <header class="border-b p-4 flex justify-between items-center sticky top-0 bg-white z-50">
-        <div class="flex items-center gap-4">
-            <h1 class="text-2xl font-bold text-red-700">پنجره</h1>
-            <nav class="hidden md:flex gap-4">
-                <a href="/" class="hover:text-red-700">آگهی‌ها</a>
-                <a href="/Chat" class="hover:text-red-700">چت</a>
-                <a href="/Admin" class="hover:text-red-700">پنل مدیریت</a>
-            </nav>
-        </div>
-        <div class="flex items-center gap-4">
-            <button id="themeToggle" class="p-2 border rounded">تغییر تم</button>
-            <a href="/Login" class="bg-red-700 text-white px-4 py-2 rounded">ورود</a>
-            <a href="/PostAd" class="border border-red-700 text-red-700 px-4 py-2 rounded">ثبت آگهی</a>
+<body class="bg-gray-50 font-sans text-gray-900">
+    <header class="bg-white border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-8">
+                <a href="/" class="text-red-600 text-2xl font-black">پنجره</a>
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-600">
+                    <a href="/" class="hover:text-red-600">آگهی‌ها</a>
+                    <a href="/Chat" class="hover:text-red-600">چت</a>
+                </nav>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="/Admin" class="text-sm text-gray-500 hover:text-gray-800">پنل مدیریت</a>
+                <a href="/PostAd" class="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-700 transition">ثبت آگهی</a>
+                <div id="auth-section">
+                    <a href="/Login" class="text-sm border border-gray-300 px-3 py-2 rounded hover:bg-gray-50">ورود</a>
+                </div>
+            </div>
         </div>
     </header>
-    <main role="main" class="container mx-auto p-4">
+
+    <main class="min-h-[calc(100vh-120px)]">
         @RenderBody()
     </main>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <footer class="bg-white border-t py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>© 1403 سامانه نیازمندی‌های آنلاین پنجره دات‌نت - تمامی حقوق محفوظ است</p>
+        </div>
+    </footer>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -8,6 +8,7 @@ public class ApplicationDbContext : DbContext {
     public DbSet<Category> Categories { get; set; }
     public DbSet<ChatMessage> ChatMessages { get; set; }
     public DbSet<AdImage> AdImages { get; set; }
+    public DbSet<AdReport> Reports { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<ChatMessage>().HasOne(m => m.Sender).WithMany().HasForeignKey(m => m.SenderId).OnDelete(DeleteBehavior.Restrict);
