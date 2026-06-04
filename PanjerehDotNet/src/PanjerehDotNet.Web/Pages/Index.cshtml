@@ -1,0 +1,27 @@
+@page
+@model IndexModel
+@{ ViewData["Title"] = "صفحه اصلی"; }
+<div class="flex gap-6">
+    <aside class="w-64 hidden lg:block border-l pl-4">
+        <h3 class="font-bold mb-4">دسته‌بندی‌ها</h3>
+        <ul class="space-y-2">
+            <li><a href="?cat=1" class="hover:text-red-700">املاک</a></li>
+            <li><a href="?cat=2" class="hover:text-red-700">وسایل نقلیه</a></li>
+        </ul>
+    </aside>
+    <section class="flex-1">
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="adsContainer">
+            @foreach (var ad in Model.Ads) {
+                <a href="/AdDetails/@ad.Id" class="border rounded-lg p-3 flex gap-4 hover:shadow-lg transition">
+                    <div class="w-32 h-32 bg-gray-200 rounded flex-shrink-0">
+                        @if (ad.Images.Any()) { <img src="@ad.Images.First()" class="w-full h-full object-cover rounded" /> }
+                    </div>
+                    <div class="flex flex-col justify-between flex-1">
+                        <h2 class="font-bold text-lg">@ad.Title</h2>
+                        <p class="text-red-700 font-bold mt-2">@ad.Price.ToString("N0") تومان</p>
+                    </div>
+                </a>
+            }
+        </div>
+    </section>
+</div>

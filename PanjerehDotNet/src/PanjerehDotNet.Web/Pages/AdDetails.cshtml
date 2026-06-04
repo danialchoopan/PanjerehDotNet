@@ -1,0 +1,9 @@
+@page "{id:int}"
+@model AdDetailsModel
+@{ ViewData["Title"] = Model.Ad.Title; }
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold mb-2">@Model.Ad.Title</h1>
+    <p class="text-xl font-bold text-red-700">@Model.Ad.Price.ToString("N0") تومان</p>
+    <p class="mt-4">@Model.Ad.Description</p>
+    <button class="bg-red-700 text-white px-6 py-2 rounded mt-4">شروع چت</button>
+</div>
