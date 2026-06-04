@@ -24,5 +24,6 @@ public interface IUnitOfWork : IDisposable {
     IAdvertisementRepository Advertisements { get; }
     IRepository<Category> Categories { get; }
     IChatRepository Chats { get; }
+    IRepository<AdReport> Reports { get; }
     Task<int> CompleteAsync();
 }

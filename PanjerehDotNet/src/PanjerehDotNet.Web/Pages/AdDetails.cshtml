@@ -1,52 +1,18 @@
 @page "{id:int}"
 @model AdDetailsModel
-@{ ViewData["Title"] = Model.Ad.Title; }
-
-<div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
-    <div class="flex-1">
-        <div class="bg-black rounded-lg overflow-hidden h-[500px] mb-4 flex items-center justify-center">
-            @if (Model.Ad.Images.Any()) {
-                <img src="@Model.Ad.Images.First()" class="max-h-full object-contain" />
-            } else {
-                <svg class="w-24 h-24 text-gray-700" fill="currentColor" viewBox="0 0 20 20"><path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/></svg>
-            }
-        </div>
-        <div class="flex gap-2 overflow-x-auto pb-4">
-            @foreach(var img in Model.Ad.Images) {
-                <img src="@img" class="w-20 h-20 object-cover rounded border-2 border-transparent hover:border-divar cursor-pointer" />
-            }
-        </div>
-
-        <div class="mt-8">
-            <h3 class="text-xl font-bold border-b pb-4 mb-4">توضیحات</h3>
-            <p class="text-gray-700 leading-relaxed whitespace-pre-line">@Model.Ad.Description</p>
-        </div>
+<div style="display: flex; gap: 30px;">
+    <div style="flex: 2;">
+        <div style="height:400px; background:#000; border-radius:8px; color:#fff; display:flex; align-items:center; justify-content:center;">تصویر آگهی</div>
+        <h3>توضیحات</h3>
+        <p style="line-height:1.8;">@Model.Ad.Description</p>
     </div>
-
-    <div class="w-full md:w-96 flex-shrink-0">
-        <div class="bg-white border rounded-lg p-6 sticky top-24">
-            <h1 class="text-2xl font-black mb-4">@Model.Ad.Title</h1>
-            <div class="text-sm text-gray-400 mb-6">@Model.Ad.CreatedAt.ToString("yyyy/MM/dd") در @Model.Ad.District، @Model.Ad.City</div>
-
-            <div class="space-y-4 mb-8">
-                <div class="flex justify-between py-3 border-b">
-                    <span class="text-gray-500">قیمت</span>
-                    <span class="font-bold">@Model.Ad.Price.ToString("N0") تومان</span>
-                </div>
-                <div class="flex justify-between py-3 border-b">
-                    <span class="text-gray-500">دسته‌بندی</span>
-                    <span class="font-bold">@Model.Ad.CategoryName</span>
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-3">
-                <button class="w-full bg-red-700 text-white py-3 rounded font-black text-lg hover:bg-red-800 transition">اطلاعات تماس</button>
-                <a href="/Chat?adId=@Model.Ad.Id" class="w-full border border-red-700 text-red-700 py-3 rounded font-black text-lg text-center hover:bg-red-50 transition">چت</a>
-            </div>
-
-            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-100 rounded text-xs text-yellow-800 leading-relaxed">
-                هشدار: قبل از انجام معامله و هرگونه پرداخت وجه، از صحت کالا و هویت فروشنده اطمینان حاصل کنید.
-            </div>
+    <div style="flex: 1;">
+        <div style="border:1px solid #eee; padding:20px; border-radius:8px;">
+            <h1>@Model.Ad.Title</h1>
+            <p style="color:#999;">@Model.Ad.District</p>
+            <div style="font-size:20px; font-weight:bold; color:#a62626; margin:20px 0;">@Model.Ad.Price.ToString("N0") تومان</div>
+            <button style="width:100%; background:#a62626; color:#fff; border:none; padding:12px; border-radius:4px; font-weight:bold; cursor:pointer;">نمایش شماره تماس</button>
+            <a href="/Chat" style="display:block; margin-top:10px; text-align:center; border:1px solid #a62626; color:#a62626; padding:12px; border-radius:4px; text-decoration:none; font-weight:bold;">چت</a>
         </div>
     </div>
 </div>

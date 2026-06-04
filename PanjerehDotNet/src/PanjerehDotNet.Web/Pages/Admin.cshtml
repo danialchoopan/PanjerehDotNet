@@ -1,81 +1,44 @@
 @page
 @model AdminModel
-@{ ViewData["Title"] = "پنل مدیریت پنجره"; }
-
-<div class="space-y-8">
-    <div class="flex items-center justify-between">
-        <h1 class="text-3xl font-black">داشبورد مدیریت</h1>
-        <div class="text-gray-400">تاریخ امروز: @DateTime.Now.ToString("yyyy/MM/dd")</div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-8 rounded-2xl border-b-4 border-blue-500 shadow-sm">
-            <div class="text-gray-400 text-sm font-bold mb-1">کل آگهی‌ها</div>
-            <div class="text-4xl font-black">@Model.Stats.TotalAds</div>
+<div style="padding: 30px; background: #f4f6f9; min-height: 100vh;">
+    <h1 style="font-weight: 900; margin-bottom: 30px; color: #1a202c;">پنل مدیریت هوشمند پنجره</h1>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px;">
+        <div style="background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 5px solid #4299e1;">
+            <div style="color: #a0aec0; font-size: 14px; font-weight: bold;">کل آگهی‌ها</div>
+            <div style="font-size: 32px; font-weight: 900; margin-top: 10px;">@Model.Stats.TotalAds</div>
         </div>
-        <div class="bg-white p-8 rounded-2xl border-b-4 border-green-500 shadow-sm">
-            <div class="text-gray-400 text-sm font-bold mb-1">آگهی‌های تایید شده</div>
-            <div class="text-4xl font-black">@Model.Stats.ApprovedAds</div>
+        <div style="background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 5px solid #48bb78;">
+            <div style="color: #a0aec0; font-size: 14px; font-weight: bold;">تایید شده</div>
+            <div style="font-size: 32px; font-weight: 900; margin-top: 10px; color: #48bb78;">@Model.Stats.ApprovedAds</div>
         </div>
-        <div class="bg-white p-8 rounded-2xl border-b-4 border-red-500 shadow-sm">
-            <div class="text-gray-400 text-sm font-bold mb-1">در انتظار بررسی</div>
-            <div class="text-4xl font-black">@Model.Stats.PendingAds</div>
+        <div style="background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 5px solid #f56565;">
+            <div style="color: #a0aec0; font-size: 14px; font-weight: bold;">در انتظار</div>
+            <div style="font-size: 32px; font-weight: 900; margin-top: 10px; color: #f56565;">@Model.Stats.PendingAds</div>
+        </div>
+        <div style="background: #fff; padding: 25px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-right: 5px solid #ed8936;">
+            <div style="color: #a0aec0; font-size: 14px; font-weight: bold;">گزارش‌ها</div>
+            <div style="font-size: 32px; font-weight: 900; margin-top: 10px; color: #ed8936;">@Model.Stats.ReportCount</div>
         </div>
     </div>
-
-    <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
-        <div class="p-6 border-b bg-gray-50 flex justify-between items-center">
-            <h2 class="font-black text-xl">آخرین آگهی‌ها</h2>
-            <button class="text-divar text-sm font-bold">مشاهده همه</button>
-        </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-right">
-                <thead>
-                    <tr class="text-gray-400 text-sm uppercase tracking-wider">
-                        <th class="p-6">شناسه</th>
-                        <th class="p-6">عنوان آگهی</th>
-                        <th class="p-6">وضعیت</th>
-                        <th class="p-6">عملیات</th>
+    <div style="background: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+        <div style="padding: 20px; background: #edf2f7; font-weight: bold; border-bottom: 1px solid #e2e8f0;">لیست گزارش‌های تخلف اخیر</div>
+        <table style="width: 100%; border-collapse: collapse; text-align: right;">
+            <thead>
+                <tr style="color: #718096; font-size: 12px; background: #f8fafc;">
+                    <th style="padding: 15px 25px; border-bottom: 2px solid #e2e8f0;">عنوان آگهی</th>
+                    <th style="padding: 15px 25px; border-bottom: 2px solid #e2e8f0;">علت گزارش</th>
+                    <th style="padding: 15px 25px; border-bottom: 2px solid #e2e8f0;">توضیحات مدیریت</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var r in Model.Reports) {
+                    <tr style="border-bottom: 1px solid #edf2f7;">
+                        <td style="padding: 15px 25px; font-weight: bold; color: #2d3748;">@r.Advertisement?.Title</td>
+                        <td style="padding: 15px 25px; color: #e53e3e; font-weight: bold;">@r.Reason</td>
+                        <td style="padding: 15px 25px; color: #4a5568;">@r.Description</td>
                     </tr>
-                </thead>
-                <tbody class="divide-y">
-                    @foreach(var ad in Model.RecentAds) {
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="p-6 font-mono text-xs">#@ad.Id</td>
-                            <td class="p-6 font-bold">@ad.Title</td>
-                            <td class="p-6">
-                                @if(ad.IsApproved) {
-                                    <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">تایید شده</span>
-                                } else {
-                                    <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">در انتظار</span>
-                                }
-                            </td>
-                            <td class="p-6">
-                                @if(!ad.IsApproved) {
-                                    <button onclick="approve(@ad.Id)" class="text-divar font-bold text-sm">تایید فوری</button>
-                                }
-                                <button class="text-gray-400 font-bold text-sm mr-4">حذف</button>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        function approve(id) {
-            fetch(`/api/Admin/approve-ad/${id}`, {
-                method: 'POST',
-                headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
-            }).then(r => {
-                if(r.ok) {
-                    alert('آگهی تایید شد');
-                    location.reload();
-                }
-            });
-        }
-    </script>
-}

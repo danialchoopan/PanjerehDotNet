@@ -4,44 +4,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - پنجره دات‌نت</title>
-    <link rel="stylesheet" href="~/css/tailwind.css" asp-append-version="true" />
-    <style>
-        @@font-face { font-family: 'Vazir'; src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@@v30.1.0/dist/Vazir.woff2') format('woff2'); }
-        body { font-family: 'Vazir', Tahoma, sans-serif; }
-        .btn-divar { background-color: #a62626; color: white; padding: 0.5rem 1.5rem; border-radius: 0.25rem; font-weight: bold; }
-        .text-divar { color: #a62626; }
-    </style>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body class="light bg-gray-50 text-gray-900 transition-colors duration-300">
+<body class="bg-gray-50 font-sans text-gray-900">
     <header class="bg-white border-b sticky top-0 z-50">
-        <div class="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-8">
-                <a href="/" class="text-3xl font-black text-divar">پنجره</a>
-                <div class="hidden md:flex items-center gap-2 text-gray-500 border-r pr-4">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <span>تهران</span>
-                </div>
+                <a href="/" class="text-red-600 text-2xl font-black">پنجره</a>
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-600">
+                    <a href="/" class="hover:text-red-600">آگهی‌ها</a>
+                    <a href="/Chat" class="hover:text-red-600">چت</a>
+                </nav>
             </div>
             <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 hover:bg-gray-100 rounded-full">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                </button>
-                <a href="/Chat" class="flex flex-col items-center text-gray-500 hover:text-gray-900">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-                    <span class="text-xs">چت</span>
-                </a>
-                <a href="/Admin" class="flex flex-col items-center text-gray-500 hover:text-gray-900">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                    <span class="text-xs">پنل مدیریت</span>
-                </a>
-                <a href="/PostAd" class="btn-divar">ثبت آگهی</a>
+                <a href="/Admin" class="text-sm text-gray-500 hover:text-gray-800">پنل مدیریت</a>
+                <a href="/PostAd" class="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-700 transition">ثبت آگهی</a>
+                <div id="auth-section">
+                    <a href="/Login" class="text-sm border border-gray-300 px-3 py-2 rounded hover:bg-gray-50">ورود</a>
+                </div>
             </div>
         </div>
     </header>
-    <main class="container mx-auto px-4 py-8">
+
+    <main class="min-h-[calc(100vh-120px)]">
         @RenderBody()
     </main>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <footer class="bg-white border-t py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
+            <p>© 1403 سامانه نیازمندی‌های آنلاین پنجره دات‌نت - تمامی حقوق محفوظ است</p>
+        </div>
+    </footer>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
