@@ -1,4 +1,4 @@
-# سامانه جامع نیازمندی‌های آنلاین پنجره دات‌نت (PanjerehDotNet)
+# سامانه جامع نیازمندی‌های آنلاین پنجره دات‌نت
 
 پروژه پنجره دات‌نت یک شبیه‌ساز کامل و پیشرفته از پلتفرم دیوار است که با استفاده از آخرین استانداردهای توسعه نرم‌افزار در دنیای دات‌نت طراحی و پیاده‌سازی شده است. این سامانه با تمرکز بر سرعت، امنیت و تجربه کاربری مدرن، تمامی امکانات لازم برای یک سایت نیازمندی‌ها را فراهم می‌کند.
 
@@ -49,9 +49,9 @@
 
 ## اسکرین‌شات‌های محیط برنامه
 
-![صفحه اصلی پنجره](main/PanjerehDotNet/screenshots/home_page.png)
-![جزئیات آگهی و چت](/PanjerehDotNet/main/PanjerehDotNet/screenshots/ad_details.png)
-![پنل مدیریت هوشمند](PanjerehDotNet/main/PanjerehDotNet/screenshots/admin_dashboard.png)
+![صفحه اصلی پنجره](./screenshots/home_page.png)
+![جزئیات آگهی و چت](./screenshots/ad_details.png)
+![پنل مدیریت هوشمند](./screenshots/admin_dashboard.png)
 
 ## تکنولوژی‌های استفاده شده
 
