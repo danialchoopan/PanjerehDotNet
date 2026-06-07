@@ -1,22 +1,47 @@
 @page
 @model IndexModel
-<div id="ad-container" style="padding: 20px; background: #fff; min-height: 100vh;">
-    <h1 style="color: #a62626; font-size: 28px; font-weight: bold; margin-bottom: 30px; border-bottom: 2px solid #eee; padding-bottom: 15px;">دیوار پنجره - نیازمندی‌های آنلاین</h1>
-    <div id="ad-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px;">
+@{
+    ViewData["Title"] = "صفحه اصلی";
+}
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-8 pb-4 border-b gap-4">
+        <h1 class="text-2xl font-black text-gray-800">نیازمندی‌های آنلاین در سراسر ایران</h1>
+        <div class="flex gap-2">
+            <button class="px-4 py-1.5 rounded-full border border-gray-200 text-sm hover:bg-gray-50 transition">همه دسته‌ها</button>
+            <button class="px-4 py-1.5 rounded-full border border-gray-200 text-sm hover:bg-gray-50 transition">تهران</button>
+        </div>
+    </div>
+
+    <div id="ad-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @foreach (var ad in Model.Ads)
         {
-            <div class="ad-card" style="border: 1px solid #ddd; border-radius: 12px; padding: 15px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer;" onclick="location.href='/AdDetails/@ad.Id'">
-                <div style="height: 160px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #999;">تصویر کالا</div>
-                <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #333;">@ad.Title</h3>
-                <div style="color: #a62626; font-weight: bold; font-size: 16px;">@ad.Price.ToString("N0") تومان</div>
-                <div style="margin-top: 15px; font-size: 12px; color: #777; display: flex; justify-content: space-between;">
-                    <span>@ad.District</span>
-                    <span>لحظاتی پیش</span>
+            <div class="ad-card group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col" onclick="location.href='/AdDetails/@ad.Id'">
+                <div class="aspect-w-16 aspect-h-10 bg-gray-100 flex items-center justify-center overflow-hidden h-48">
+                    <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform duration-500">
+                        <svg width="48" height="48" class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    </div>
+                </div>
+                <div class="p-4 flex-1 flex flex-col">
+                    <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 min-h-[3rem]">@ad.Title</h3>
+                    <div class="mt-auto">
+                        <div class="text-rose-600 font-bold text-lg">@ad.Price.ToString("N0") تومان</div>
+                        <div class="mt-3 flex items-center justify-between text-xs text-gray-500">
+                            <span>@ad.District</span>
+                            <span>لحظاتی پیش</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         }
     </div>
-    <div id="loading" style="text-align: center; padding: 20px; display: none;">در حال بارگذاری...</div>
+
+    <div id="loading" class="text-center py-12 mt-8 hidden">
+        <div class="inline-flex items-center gap-3 px-6 py-3 bg-white border rounded-full shadow-sm text-gray-600">
+            <svg width="20" height="20" class="animate-spin h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            در حال بارگذاری آگهی‌های جدید...
+        </div>
+    </div>
 </div>
 
 <script>
@@ -30,33 +55,40 @@
 
     function loadMoreAds() {
         loading = true;
-        document.getElementById('loading').style.display = 'block';
+        document.getElementById('loading').classList.remove('hidden');
         page++;
-        fetch(`/api/ads?page=${page}&pageSize=6`)
+        fetch(`/api/ads?page=${page}&pageSize=8`)
             .then(res => res.json())
             .then(data => {
                 if (data.length > 0) {
                     const grid = document.getElementById('ad-grid');
                     data.forEach(ad => {
                         const card = document.createElement('div');
-                        card.className = 'ad-card';
-                        card.style = 'border: 1px solid #ddd; border-radius: 12px; padding: 15px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer;';
+                        card.className = 'ad-card group bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer flex flex-col';
                         card.onclick = () => location.href = `/AdDetails/${ad.id}`;
                         card.innerHTML = `
-                            <div style="height: 160px; background: #f0f0f0; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #999;">تصویر کالا</div>
-                            <h3 style="margin: 0 0 10px 0; font-size: 18px; color: #333;">${ad.title}</h3>
-                            <div style="color: #a62626; font-weight: bold; font-size: 16px;">${ad.price.toLocaleString()} تومان</div>
-                            <div style="margin-top: 15px; font-size: 12px; color: #777; display: flex; justify-content: space-between;">
-                                <span>${ad.district}</span>
-                                <span>لحظاتی پیش</span>
+                            <div class="aspect-w-16 aspect-h-10 bg-gray-100 flex items-center justify-center overflow-hidden h-48">
+                                <div class="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:scale-110 transition-transform duration-500">
+                                    <svg width="48" height="48" class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="p-4 flex-1 flex flex-col">
+                                <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 min-h-[3rem]">${ad.title}</h3>
+                                <div class="mt-auto">
+                                    <div class="text-rose-600 font-bold text-lg">${ad.price.toLocaleString()} تومان</div>
+                                    <div class="mt-3 flex items-center justify-between text-xs text-gray-500">
+                                        <span>${ad.district}</span>
+                                        <span>لحظاتی پیش</span>
+                                    </div>
+                                </div>
                             </div>
                         `;
                         grid.appendChild(card);
                     });
                     loading = false;
-                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('loading').classList.add('hidden');
                 } else {
-                    document.getElementById('loading').innerHTML = 'آگهی دیگری وجود ندارد';
+                    document.getElementById('loading').innerHTML = '<div class="text-gray-400">آگهی دیگری وجود ندارد</div>';
                 }
             });
     }

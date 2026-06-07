@@ -13,26 +13,32 @@ def take_screenshots():
 
         # Home Page
         print("Taking home_page.png...")
-        page.goto("http://localhost:5000")
-        time.sleep(2)
+        page.goto("http://localhost:5259")
+        time.sleep(5)
         page.screenshot(path=os.path.join(screenshots_dir, "home_page.png"))
 
         # Ad Details
         print("Taking ad_details.png...")
-        page.goto("http://localhost:5000/AdDetails/1")
-        time.sleep(2)
+        page.goto("http://localhost:5259/AdDetails/1")
+        time.sleep(3)
         page.screenshot(path=os.path.join(screenshots_dir, "ad_details.png"))
 
-        # Login and Chat Room
-        print("Logging in and taking chat_room.png...")
-        page.goto("http://localhost:5000/Login?returnUrl=/Chat")
+        # Login and then Chat
+        print("Logging in...")
+        page.goto("http://localhost:5259/Login")
+        page.fill('input[name="PhoneNumber"]', '09121111111')
+        page.click('button[type="submit"]')
+        time.sleep(5) # Wait for redirect
+
+        print("Taking chat.png...")
+        page.goto("http://localhost:5259/Chat?adId=1&otherUserId=3")
         time.sleep(3)
-        page.screenshot(path=os.path.join(screenshots_dir, "chat_room.png"))
+        page.screenshot(path=os.path.join(screenshots_dir, "chat.png"))
 
         # Admin Dashboard
         print("Taking admin_dashboard.png...")
-        page.goto("http://localhost:5000/Admin")
-        time.sleep(2)
+        page.goto("http://localhost:5259/Admin")
+        time.sleep(3)
         page.screenshot(path=os.path.join(screenshots_dir, "admin_dashboard.png"))
 
         browser.close()

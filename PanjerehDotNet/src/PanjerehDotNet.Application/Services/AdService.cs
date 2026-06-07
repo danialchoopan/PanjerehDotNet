@@ -39,6 +39,7 @@ public class AdService : IAdService {
     private AdvertisementDto MapToDto(Advertisement ad) => new AdvertisementDto {
         Id = ad.Id, Title = ad.Title, Description = ad.Description, Price = ad.Price, CreatedAt = ad.CreatedAt,
         CategoryName = ad.Category?.Name ?? "", City = ad.City, District = ad.District,
-        Latitude = ad.Latitude, Longitude = ad.Longitude, Images = ad.Images.Select(i => i.Url).ToList()
+        Latitude = ad.Latitude, Longitude = ad.Longitude, UserId = ad.UserId,
+        Images = ad.Images.Select(i => i.Url).ToList()
     };
 }
