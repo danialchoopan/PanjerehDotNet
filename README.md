@@ -48,10 +48,9 @@
 - [راهنمای اتصال اپلیکیشن اندروید](./docs/androidreadmeapi.md)
 
 ## اسکرین‌شات‌های محیط برنامه
-
-![صفحه اصلی پنجره](./screenshots/home_page.png)
-![جزئیات آگهی و چت](./screenshots/ad_details.png)
-![پنل مدیریت هوشمند](./screenshots/admin_dashboard.png)
+![صفحه اصلی پنجره](./PanjerehDotNet/screenshots/home_page.png)
+![جزئیات آگهی و چت](./PanjerehDotNet/screenshots/admin_dashboard.png)
+![پنل مدیریت هوشمند](./PanjerehDotNet/screenshots/admin_dashboard.png)
 
 ## تکنولوژی‌های استفاده شده
 
