@@ -4,24 +4,38 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - پنجره دات‌نت</title>
+    <link rel="stylesheet" href="~/css/tailwind.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body class="bg-gray-50 font-sans text-gray-900">
-    <header class="bg-white border-b sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-8">
-                <a href="/" class="text-red-600 text-2xl font-black">پنجره</a>
-                <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-600">
-                    <a href="/" class="hover:text-red-600">آگهی‌ها</a>
-                    <a href="/Chat" class="hover:text-red-600">چت</a>
+<body class="bg-gray-50 text-gray-900 font-vazir">
+    <header class="bg-white border-b sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-8 flex-1">
+                <a href="/" class="text-red-600 text-2xl font-black shrink-0">پنجره</a>
+
+                <div class="hidden md:flex flex-1 max-w-md relative">
+                    <input type="text" placeholder="جستجو در همه آگهی‌ها" class="w-full bg-gray-100 border-none rounded-lg py-2 pr-10 pl-4 focus:ring-2 focus:ring-red-500 focus:bg-white transition" />
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <svg width="20" height="20" class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+
+                <nav class="hidden lg:flex gap-6 text-sm font-medium text-gray-600">
+                    <a href="/" class="hover:text-red-600 transition">آگهی‌ها</a>
+                    <a href="/Chat" class="hover:text-red-600 transition">چت</a>
+                    <div class="h-6 w-px bg-gray-200"></div>
+                    <a href="#" class="hover:text-red-600 transition">درباره ما</a>
                 </nav>
             </div>
+
             <div class="flex items-center gap-4">
-                <a href="/Admin" class="text-sm text-gray-500 hover:text-gray-800">پنل مدیریت</a>
-                <a href="/PostAd" class="bg-red-600 text-white px-4 py-2 rounded font-bold text-sm hover:bg-red-700 transition">ثبت آگهی</a>
+                <a href="/Admin" class="text-sm text-gray-500 hover:text-gray-800 hidden sm:block">پنل مدیریت</a>
                 <div id="auth-section">
-                    <a href="/Login" class="text-sm border border-gray-300 px-3 py-2 rounded hover:bg-gray-50">ورود</a>
+                    <a href="/Login" class="text-sm font-medium border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition">ورود / ثبت‌نام</a>
                 </div>
+                <a href="/PostAd" class="bg-red-600 text-white px-5 py-2 rounded-lg font-bold text-sm hover:bg-red-700 transition shadow-md">ثبت آگهی</a>
             </div>
         </div>
     </header>
@@ -30,9 +44,31 @@
         @RenderBody()
     </main>
 
-    <footer class="bg-white border-t py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-gray-500 text-sm">
-            <p>© 1403 سامانه نیازمندی‌های آنلاین پنجره دات‌نت - تمامی حقوق محفوظ است</p>
+    <footer class="bg-white border-t py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-sm text-gray-500">
+                <div class="col-span-1 md:col-span-2">
+                    <span class="text-red-600 text-xl font-black">پنجره</span>
+                    <p class="mt-4 leading-relaxed">پنجره، بزرگ‌ترین سامانه نیازمندی‌های آنلاین و خرید و فروش بی‌واسطه کالا. از خودرو و املاک تا لوازم خانه و خدمات را در پنجره بیابید.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">خدمات مشتریان</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-red-600">پشتیبانی</a></li>
+                        <li><a href="#" class="hover:text-red-600">قوانین و مقررات</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-4">درباره پنجره</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-red-600">فرصت‌های شغلی</a></li>
+                        <li><a href="#" class="hover:text-red-600">تماس با ما</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t mt-12 pt-8 text-center text-xs">
+                <p>© 1403 سامانه نیازمندی‌های آنلاین پنجره دات‌نت - تمامی حقوق محفوظ است</p>
+            </div>
         </div>
     </footer>
 

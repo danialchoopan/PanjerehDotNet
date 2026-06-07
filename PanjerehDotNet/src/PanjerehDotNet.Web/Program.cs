@@ -19,8 +19,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
 // Database
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data Source=panjereh.db"));
+var dbProvider = builder.Configuration["DatabaseProvider"] ?? "SQLite";
+builder.Services.AddDbContext<ApplicationDbContext>(options => {
+    if (dbProvider == "SQLite")
+        options.UseSqlite(builder.Configuration.GetConnectionString("SQLiteConnection"));
+    else
+        options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
+});
 
 // Authentication - Support both JWT (for API/Mobile) and Cookies (for Web UI)
 var keyString = builder.Configuration["Jwt:Key"] ?? "SecretKeyForPanjerehDotNetProject2024";
@@ -65,7 +70,14 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
-    context.Database.EnsureCreated();
+    if (dbProvider == "SQLite")
+    {
+        context.Database.EnsureCreated();
+    }
+    else
+    {
+        context.Database.Migrate();
+    }
     await PanjerehDotNet.Infrastructure.Data.DataSeeder.SeedAsync(context);
 }
 

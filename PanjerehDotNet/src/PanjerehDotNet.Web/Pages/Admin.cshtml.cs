@@ -22,4 +22,35 @@ public class AdminModel : PageModel {
         RecentAds = all.OrderByDescending(a => a.CreatedAt).Take(10);
         Reports = reports.OrderByDescending(r => r.CreatedAt).Take(10);
     }
+
+    public async Task OnPostApproveAsync(int id)
+    {
+        var ad = await _unitOfWork.Advertisements.GetByIdAsync(id);
+        if (ad != null)
+        {
+            ad.IsApproved = true;
+            _unitOfWork.Advertisements.Update(ad);
+            await _unitOfWork.CompleteAsync();
+        }
+    }
+
+    public async Task OnPostRejectAsync(int id)
+    {
+        var ad = await _unitOfWork.Advertisements.GetByIdAsync(id);
+        if (ad != null)
+        {
+            _unitOfWork.Advertisements.Remove(ad);
+            await _unitOfWork.CompleteAsync();
+        }
+    }
+
+    public async Task OnPostBanUserAsync(int id)
+    {
+        var user = await _unitOfWork.Users.GetByIdAsync(id);
+        if (user != null)
+        {
+            _unitOfWork.Users.Remove(user);
+            await _unitOfWork.CompleteAsync();
+        }
+    }
 }

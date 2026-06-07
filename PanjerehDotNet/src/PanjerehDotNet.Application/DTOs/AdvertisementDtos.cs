@@ -10,6 +10,7 @@ public class AdvertisementDto {
     public string District { get; set; } = string.Empty;
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    public int UserId { get; set; }
     public List<string> Images { get; set; } = new();
 }
 public class CreateAdvertisementDto {
